@@ -4,64 +4,43 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Mapa de Patrocinadores | NiF</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 /* ===== Tokens de design ===== */
 :root{
-  --navy:#0A1628;        /* fundo principal */
-  --navy-2:#0F1F38;      /* cartão */
-  --graphite:#232D3B;    /* bordas / campos */
-  --graphite-2:#2E3A4C;
-  --text:#E8EEF7;
-  --muted:#93A1B8;
-  --neon:#2BFF88;        /* ação principal */
-  --blue:#3D8BFF;        /* detalhe secundário */
-  --danger:#FF6B6B;
-  --radius:14px;
-  --display:'Sora','Segoe UI',system-ui,sans-serif;
-  --body:'Inter','Segoe UI',system-ui,sans-serif;
+  --navy:#0A1628; --navy-2:#0F1F38; --graphite:#232D3B; --graphite-2:#2E3A4C;
+  --text:#E8EEF7; --muted:#93A1B8; --neon:#2BFF88; --blue:#3D8BFF; --danger:#FF6B6B;
+  --font:'Segoe UI',system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html{-webkit-text-size-adjust:100%}
 body{
-  font-family:var(--body);color:var(--text);line-height:1.55;min-height:100vh;
-  background:
-    radial-gradient(900px 500px at 85% -10%,rgba(61,139,255,.18),transparent 60%),
-    var(--navy);
+  font-family:var(--font);color:var(--text);line-height:1.55;min-height:100vh;
+  background:radial-gradient(900px 500px at 85% -10%,rgba(61,139,255,.18),transparent 60%),var(--navy);
   display:flex;flex-direction:column;align-items:center;padding:24px 16px 48px;
 }
-header{width:100%;max-width:620px;display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}
-.brand{font-family:var(--display);font-weight:800;font-size:1.35rem;letter-spacing:.5px}
+header,main{width:100%;max-width:620px}
+header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px}
+.brand{font-weight:800;font-size:1.4rem;letter-spacing:.5px}
 .brand span{color:var(--neon)}
 .tag{font-size:.8rem;color:var(--muted)}
-main{width:100%;max-width:620px}
-.card{
-  background:var(--navy-2);border:1px solid var(--graphite);border-radius:20px;
-  padding:28px 24px;box-shadow:0 20px 50px rgba(0,0,0,.35);
-}
-h1,h2{font-family:var(--display);line-height:1.2}
-h1{font-size:1.6rem;margin-bottom:8px}
-h2{font-size:1.35rem;margin-bottom:6px}
+.card{background:var(--navy-2);border:1px solid var(--graphite);border-radius:20px;padding:28px 24px;box-shadow:0 20px 50px rgba(0,0,0,.35)}
+h1,h2{line-height:1.2;margin-bottom:8px}
+h1{font-size:1.6rem} h2{font-size:1.35rem}
 .lead{color:var(--muted);margin-bottom:22px;font-size:.98rem}
 
-/* ===== Progresso ===== */
-.progress{margin-bottom:22px}
+/* Progresso */
 .progress-top{display:flex;justify-content:space-between;font-size:.82rem;color:var(--muted);margin-bottom:8px}
-.bar{height:6px;background:var(--graphite);border-radius:99px;overflow:hidden}
-.bar i{display:block;height:100%;width:25%;background:linear-gradient(90deg,var(--blue),var(--neon));border-radius:99px;transition:width .4s ease}
+.bar{height:6px;background:var(--graphite);border-radius:99px;overflow:hidden;margin-bottom:22px}
+.bar i{display:block;height:100%;width:25%;background:linear-gradient(90deg,var(--blue),var(--neon));transition:width .4s}
 
-/* ===== Campos ===== */
+/* Etapas e campos */
 .step{display:none}
 .step.active{display:block;animation:in .35s ease}
 @keyframes in{from{opacity:0;transform:translateX(14px)}to{opacity:1;transform:none}}
 .field{margin-bottom:18px}
-label.lbl,.legend{display:block;font-weight:600;font-size:.92rem;margin-bottom:7px}
+.lbl{display:block;font-weight:600;font-size:.92rem;margin-bottom:7px}
 input[type=text],select{
   width:100%;background:var(--navy);color:var(--text);border:1px solid var(--graphite-2);
-  border-radius:10px;padding:13px 14px;font:inherit;font-size:1rem;transition:border-color .2s,box-shadow .2s;
-  appearance:none;-webkit-appearance:none;
+  border-radius:10px;padding:13px 14px;font:inherit;font-size:1rem;appearance:none;-webkit-appearance:none;
 }
 select{
   background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);
@@ -72,31 +51,25 @@ input:focus,select:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 
 .invalid{border-color:var(--danger)!important}
 .err{color:var(--danger);font-size:.82rem;margin-top:5px;display:none}
 .err.show{display:block}
+
+/* Checkboxes em formato de cartão */
 .checks{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .check{position:relative}
-.check input{position:absolute;opacity:0;inset:0;cursor:pointer;width:100%;height:100%;margin:0}
-.check span{
-  display:block;padding:13px 14px 13px 42px;border:1px solid var(--graphite-2);border-radius:10px;
-  background:var(--navy);font-size:.92rem;position:relative;transition:all .2s;
-}
-.check span::before{
-  content:"";position:absolute;left:14px;top:50%;width:16px;height:16px;margin-top:-8px;
-  border:2px solid var(--graphite-2);border-radius:5px;transition:all .2s;
-}
+.check input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;margin:0}
+.check span{display:block;position:relative;padding:13px 14px 13px 42px;border:1px solid var(--graphite-2);border-radius:10px;background:var(--navy);font-size:.92rem;transition:.2s}
+.check span::before{content:"";position:absolute;left:14px;top:50%;width:16px;height:16px;margin-top:-8px;border:2px solid var(--graphite-2);border-radius:5px;transition:.2s}
 .check input:checked+span{border-color:var(--neon);background:rgba(43,255,136,.07)}
 .check input:checked+span::before{background:var(--neon);border-color:var(--neon);box-shadow:inset 0 0 0 3px var(--navy)}
-.check input:focus-visible+span{box-shadow:0 0 0 3px rgba(61,139,255,.35)}
 
-/* ===== Botões ===== */
+/* Botões */
 .actions{display:flex;gap:12px;margin-top:24px}
-button{font:inherit;cursor:pointer;border:0;border-radius:12px;padding:14px 22px;font-weight:700;font-size:1rem;transition:transform .15s,box-shadow .2s,background .2s}
-button:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+button{font:inherit;cursor:pointer;border:0;border-radius:12px;padding:14px 22px;font-weight:700;font-size:1rem;transition:transform .15s,box-shadow .2s}
 .btn-primary{flex:1;background:var(--neon);color:#04210F;box-shadow:0 8px 24px rgba(43,255,136,.25)}
-.btn-primary:hover{transform:translateY(-1px);box-shadow:0 12px 30px rgba(43,255,136,.35)}
+.btn-primary:hover{transform:translateY(-1px)}
 .btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--graphite-2)}
-.btn-ghost:hover{color:var(--text);border-color:var(--muted)}
+.btn-ghost[hidden]{display:none}
 
-/* ===== Resultado ===== */
+/* Resultado */
 #result{display:none;text-align:center}
 #result.active{display:block;animation:in .45s ease}
 .ring{position:relative;width:190px;height:190px;margin:4px auto 20px}
@@ -104,28 +77,22 @@ button:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
 .ring circle{fill:none;stroke-width:12;stroke-linecap:round}
 .ring .track{stroke:var(--graphite)}
 .ring .fill{stroke:var(--neon);stroke-dasharray:502;stroke-dashoffset:502;transition:stroke-dashoffset 1.6s cubic-bezier(.2,.8,.2,1)}
-.ring .num{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:var(--display);font-weight:800;font-size:3rem}
-.ring .num small{font-size:.8rem;font-weight:500;color:var(--muted);font-family:var(--body)}
-.headline{font-family:var(--display);font-size:1.4rem;font-weight:700;margin-bottom:14px}
+.ring .num{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:800;font-size:3rem}
+.ring .num small{font-size:.8rem;font-weight:500;color:var(--muted)}
+.headline{font-size:1.4rem;font-weight:700;margin-bottom:14px}
 .headline b{color:var(--neon)}
 .level{display:inline-block;padding:5px 14px;border-radius:99px;font-size:.82rem;font-weight:600;margin-bottom:16px;background:rgba(61,139,255,.15);color:#8DBBFF;border:1px solid rgba(61,139,255,.4)}
 .explain{color:var(--muted);text-align:left;background:var(--navy);border:1px solid var(--graphite);border-radius:12px;padding:16px;margin-bottom:20px;font-size:.95rem}
-.breakdown{display:grid;gap:8px;text-align:left;margin-bottom:22px}
+.breakdown{display:grid;gap:10px;text-align:left;margin-bottom:22px}
 .row{display:flex;justify-content:space-between;font-size:.88rem;color:var(--muted)}
 .row b{color:var(--text)}
 .mini{height:5px;background:var(--graphite);border-radius:99px;overflow:hidden;margin-top:4px}
-.mini i{display:block;height:100%;background:var(--blue);border-radius:99px;transition:width 1.2s ease;width:0}
-.btn-wa{display:block;width:100%;text-decoration:none;background:var(--neon);color:#04210F;font-weight:800;border-radius:12px;padding:17px 20px;font-size:1.05rem;box-shadow:0 8px 26px rgba(43,255,136,.3);transition:transform .15s}
-.btn-wa:hover{transform:translateY(-2px)}
-.restart{margin-top:14px;background:none;color:var(--muted);text-decoration:underline;padding:8px;font-weight:500;font-size:.9rem}
+.mini i{display:block;height:100%;width:0;background:var(--blue);transition:width 1.2s ease}
+.btn-wa{display:block;text-decoration:none;background:var(--neon);color:#04210F;font-weight:800;border-radius:12px;padding:17px 20px;font-size:1.05rem;box-shadow:0 8px 26px rgba(43,255,136,.3)}
+.restart{margin-top:14px;background:none;color:var(--muted);text-decoration:underline;font-weight:500;font-size:.9rem}
 footer{margin-top:22px;font-size:.78rem;color:#5F6E86;text-align:center}
 
-@media(max-width:520px){
-  .card{padding:22px 18px}
-  .checks{grid-template-columns:1fr}
-  h1{font-size:1.4rem}
-}
-@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media(max-width:520px){.card{padding:22px 18px}.checks{grid-template-columns:1fr}h1{font-size:1.4rem}}
 </style>
 </head>
 <body>
@@ -136,12 +103,10 @@ footer{margin-top:22px;font-size:.78rem;color:#5F6E86;text-align:center}
 </header>
 
 <main>
-  <!-- ================= FORMULÁRIO (multi-step) ================= -->
-  <form id="form" class="card" novalidate>
-    <div class="progress">
-      <div class="progress-top"><span id="stepLabel">Etapa 1 de 4</span><span id="stepName">Seus dados</span></div>
-      <div class="bar"><i id="barFill"></i></div>
-    </div>
+  <!-- ========== FORMULÁRIO MULTI-STEP ========== -->
+  <div id="form" class="card">
+    <div class="progress-top"><span id="stepLabel">Etapa 1 de 4</span><span id="stepName">Seus dados</span></div>
+    <div class="bar"><i id="barFill"></i></div>
 
     <!-- Etapa 1 -->
     <section class="step active" data-name="Seus dados">
@@ -149,12 +114,12 @@ footer{margin-top:22px;font-size:.78rem;color:#5F6E86;text-align:center}
       <p class="lead">Responda 4 blocos rápidos e descubra seu potencial de patrocínio.</p>
       <div class="field">
         <label class="lbl" for="produtor">Nome do produtor / responsável</label>
-        <input type="text" id="produtor" placeholder="Seu nome completo" autocomplete="name" required>
+        <input type="text" id="produtor" placeholder="Seu nome completo" autocomplete="name">
         <div class="err">Informe o nome do responsável.</div>
       </div>
       <div class="field">
         <label class="lbl" for="evento">Nome do evento</label>
-        <input type="text" id="evento" placeholder="Ex.: Summit Gaúcho de Inovação" required>
+        <input type="text" id="evento" placeholder="Ex.: Summit Gaúcho de Inovação">
         <div class="err">Informe o nome do evento.</div>
       </div>
     </section>
@@ -165,7 +130,7 @@ footer{margin-top:22px;font-size:.78rem;color:#5F6E86;text-align:center}
       <p class="lead">Formato, público e local definem quais marcas se encaixam.</p>
       <div class="field">
         <label class="lbl" for="formato">Formato do evento</label>
-        <select id="formato" required>
+        <select id="formato">
           <option value="">Selecione…</option>
           <option>Festival de Música</option>
           <option>Evento Corporativo/B2B</option>
@@ -177,7 +142,7 @@ footer{margin-top:22px;font-size:.78rem;color:#5F6E86;text-align:center}
       </div>
       <div class="field">
         <label class="lbl" for="publico">Tamanho do público estimado</label>
-        <select id="publico" required>
+        <select id="publico">
           <option value="">Selecione…</option>
           <option>Até 50 pessoas</option>
           <option>50 a 150 pessoas</option>
@@ -188,7 +153,7 @@ footer{margin-top:22px;font-size:.78rem;color:#5F6E86;text-align:center}
       </div>
       <div class="field">
         <label class="lbl" for="local">Local do evento</label>
-        <input type="text" id="local" placeholder="Ex.: Hotel, Galpão, Espaço Aberto, Arena" required>
+        <input type="text" id="local" placeholder="Ex.: Hotel, Galpão, Espaço Aberto, Arena">
         <div class="err">Informe o local.</div>
       </div>
     </section>
@@ -217,7 +182,7 @@ footer{margin-top:22px;font-size:.78rem;color:#5F6E86;text-align:center}
       <p class="lead">Quanto maior o investimento, mais a marca precisa enxergar retorno. Isso ajuda a precificar as cotas.</p>
       <div class="field">
         <label class="lbl" for="custo">Custo estimado de produção</label>
-        <select id="custo" required>
+        <select id="custo">
           <option value="">Selecione…</option>
           <option>Até R$ 5mil</option>
           <option>R$ 5mil a R$ 20mil</option>
@@ -232,10 +197,10 @@ footer{margin-top:22px;font-size:.78rem;color:#5F6E86;text-align:center}
       <button type="button" class="btn-ghost" id="btnBack" hidden>Voltar</button>
       <button type="button" class="btn-primary" id="btnNext">Continuar</button>
     </div>
-  </form>
+  </div>
 
-  <!-- ================= RESULTADO ================= -->
-  <section id="result" class="card" aria-live="polite">
+  <!-- ========== RESULTADO ========== -->
+  <section id="result" class="card">
     <div class="ring">
       <svg width="190" height="190" viewBox="0 0 190 190">
         <circle class="track" cx="95" cy="95" r="80"/>
@@ -258,177 +223,192 @@ footer{margin-top:22px;font-size:.78rem;color:#5F6E86;text-align:center}
 /* ============================================================
    MAPA DE PATROCINADORES — NiF
    1) Navegação multi-step e validação
-   2) Cálculo do score (0–100) com pesos
-   3) Tela de resultado + link do WhatsApp
+   2) Score de 0 a 100 com pesos
+   3) Resultado + link do WhatsApp
    ============================================================ */
+(function () {
+  'use strict';
 
-const WHATSAPP_NUMBER = '5551998750392'; // DDI 55 + DDD 51 + número do consultor
+  var WHATSAPP_NUMBER = '5551998750392'; // 55 (Brasil) + 51 (DDD) + número
 
-/* ---------- Pesos do score ---------- */
-// Cada bloco tem um teto de pontos. Soma dos tetos + bônus é limitada a 100.
-const PESOS = {
-  formato: {            // máx 20 — afinidade do formato com marcas
-    'Evento Corporativo/B2B': 20,
-    'Campeonato Esportivo': 18,
-    'Festival de Música': 16,
-    'Feira Gastronômica': 14,
-    'Outro': 8
-  },
-  publico: {            // máx 20 — público qualificado (150–300) pontua mais
-    'Até 50 pessoas': 8,
-    '50 a 150 pessoas': 14,
-    '150 a 300 pessoas': 20,
-    '300 a 500 pessoas': 18
-  },
-  espacos: {            // máx 25 (soma limitada) — ativos vendáveis
-    'Palco Principal': 5,
-    'Área VIP / Camarote': 5,
-    'Credenciamento / Entrada': 4,
-    'Banheiros': 2,
-    'Praça de Alimentação': 4,
-    'Coffee Break': 5,
-    'Telões / Painéis de LED': 5
-  },
-  custo: {              // máx 16 — custo maior = mais visibilidade a justificar
-    'Até R$ 5mil': 6,
-    'R$ 5mil a R$ 20mil': 12,
-    'R$ 20mil a R$ 50mil': 16,
-    'Acima de R$ 50mil': 15
+  /* ---------- Pesos do score ---------- */
+  var PESOS = {
+    formato: { 'Evento Corporativo/B2B': 20, 'Campeonato Esportivo': 18, 'Festival de Música': 16, 'Feira Gastronômica': 14, 'Outro': 8 },
+    publico: { 'Até 50 pessoas': 8, '50 a 150 pessoas': 14, '150 a 300 pessoas': 20, '300 a 500 pessoas': 18 },
+    espacos: { 'Palco Principal': 5, 'Área VIP / Camarote': 5, 'Credenciamento / Entrada': 4, 'Banheiros': 2,
+               'Praça de Alimentação': 4, 'Coffee Break': 5, 'Telões / Painéis de LED': 5 },
+    custo:   { 'Até R$ 5mil': 6, 'R$ 5mil a R$ 20mil': 12, 'R$ 20mil a R$ 50mil': 16, 'Acima de R$ 50mil': 15 }
+  };
+  var TETO_ESPACOS = 25;
+
+  function $(id) { return document.getElementById(id); }
+  var steps = Array.prototype.slice.call(document.querySelectorAll('.step'));
+  var current = 0;
+
+  /* ---------- Navegação ---------- */
+  function showStep(i) {
+    current = i;
+    steps.forEach(function (s, idx) { s.classList.toggle('active', idx === i); });
+    $('stepLabel').textContent = 'Etapa ' + (i + 1) + ' de ' + steps.length;
+    $('stepName').textContent = steps[i].getAttribute('data-name');
+    $('barFill').style.width = ((i + 1) / steps.length * 100) + '%';
+    $('btnBack').hidden = (i === 0);
+    $('btnNext').textContent = (i === steps.length - 1) ? 'Calcular Potencial de Patrocínio' : 'Continuar';
+    window.scrollTo(0, 0);
   }
-};
-const TETO_ESPACOS = 25;
 
-/* ---------- Estado e elementos ---------- */
-const $ = id => document.getElementById(id);
-const steps = [...document.querySelectorAll('.step')];
-let current = 0;
-
-function showStep(i){
-  current = i;
-  steps.forEach((s, idx) => s.classList.toggle('active', idx === i));
-  $('stepLabel').textContent = `Etapa ${i + 1} de ${steps.length}`;
-  $('stepName').textContent = steps[i].dataset.name;
-  $('barFill').style.width = ((i + 1) / steps.length * 100) + '%';
-  $('btnBack').hidden = i === 0;
-  $('btnNext').textContent = i === steps.length - 1 ? 'Calcular Potencial de Patrocínio' : 'Continuar';
-  window.scrollTo({top: 0, behavior: 'smooth'});
-}
-
-/* ---------- Validação por etapa ---------- */
-function validateStep(i){
-  let ok = true;
-  steps[i].querySelectorAll('input[type=text],select').forEach(el => {
-    const empty = !el.value.trim();
-    el.classList.toggle('invalid', empty);
-    const err = el.closest('.field').querySelector('.err');
-    if (err) err.classList.toggle('show', empty);
-    if (empty) ok = false;
-  });
-  if (steps[i].querySelector('#espacos')){
-    const any = document.querySelectorAll('input[name=espaco]:checked').length > 0;
-    $('espacosErr').classList.toggle('show', !any);
-    if (!any) ok = false;
+  /* ---------- Validação ---------- */
+  function validateStep(i) {
+    var ok = true;
+    var campos = steps[i].querySelectorAll('input[type=text], select');
+    Array.prototype.forEach.call(campos, function (el) {
+      var vazio = !el.value.trim();
+      el.classList.toggle('invalid', vazio);
+      var err = el.parentNode.querySelector('.err');
+      if (err) err.classList.toggle('show', vazio);
+      if (vazio) ok = false;
+    });
+    if (steps[i].querySelector('#espacos')) {
+      var algum = document.querySelectorAll('input[name=espaco]:checked').length > 0;
+      $('espacosErr').classList.toggle('show', !algum);
+      if (!algum) ok = false;
+    }
+    return ok;
   }
-  return ok;
-}
-// limpa o erro ao digitar/selecionar
-document.addEventListener('input', e => {
-  if (e.target.matches('input,select')){
-    e.target.classList.remove('invalid');
-    const err = e.target.closest('.field')?.querySelector('.err');
+
+  // limpa o erro ao digitar ou escolher
+  document.addEventListener('input', function (e) {
+    var el = e.target;
+    el.classList.remove('invalid');
+    var err = el.parentNode && el.parentNode.querySelector ? el.parentNode.querySelector('.err') : null;
     if (err) err.classList.remove('show');
-  }
-});
-
-$('btnNext').addEventListener('click', () => {
-  if (!validateStep(current)) return;
-  if (current < steps.length - 1) showStep(current + 1);
-  else finish();
-});
-$('btnBack').addEventListener('click', () => showStep(current - 1));
-$('form').addEventListener('keydown', e => { // Enter avança
-  if (e.key === 'Enter' && e.target.tagName !== 'BUTTON'){ e.preventDefault(); $('btnNext').click(); }
-});
-
-/* ---------- Coleta de respostas ---------- */
-function getData(){
-  return {
-    produtor: $('produtor').value.trim(),
-    evento: $('evento').value.trim(),
-    formato: $('formato').value,
-    publico: $('publico').value,
-    local: $('local').value.trim(),
-    espacos: [...document.querySelectorAll('input[name=espaco]:checked')].map(c => c.value),
-    custo: $('custo').value
-  };
-}
-
-/* ---------- Cálculo do score ---------- */
-function calcularScore(d){
-  const pFormato = PESOS.formato[d.formato] || 0;
-  const pPublico = PESOS.publico[d.publico] || 0;
-  const pEspacos = Math.min(TETO_ESPACOS, d.espacos.reduce((s, e) => s + (PESOS.espacos[e] || 0), 0));
-  const pCusto = PESOS.custo[d.custo] || 0;
-
-  // Bônus de sinergia (combinações que as marcas valorizam)
-  let bonus = 0;
-  const tem = e => d.espacos.includes(e);
-  if (d.formato === 'Evento Corporativo/B2B' && tem('Coffee Break')) bonus += 8;                 // B2B + coffee = networking
-  if (['Festival de Música','Campeonato Esportivo'].includes(d.formato) && tem('Palco Principal') && tem('Telões / Painéis de LED')) bonus += 8; // mídia visual
-  if (d.formato === 'Feira Gastronômica' && tem('Praça de Alimentação')) bonus += 8;             // consumo direto
-  if (d.publico === '150 a 300 pessoas' && tem('Área VIP / Camarote')) bonus += 5;               // público qualificado + experiência premium
-  bonus = Math.min(bonus, 15);
-
-  const total = Math.min(100, Math.round(pFormato + pPublico + pEspacos + pCusto + bonus));
-  return {
-    total,
-    partes: [
-      {nome: 'Afinidade do formato', val: pFormato, max: 20},
-      {nome: 'Público', val: pPublico, max: 20},
-      {nome: 'Espaços vendáveis', val: pEspacos, max: TETO_ESPACOS},
-      {nome: 'Escala do investimento', val: pCusto, max: 16},
-      {nome: 'Sinergias identificadas', val: bonus, max: 15}
-    ]
-  };
-}
-
-/* ---------- Link do WhatsApp (formato estrito) ---------- */
-function montarLinkWhatsApp(d, score){
-  const msg =
-`Olá NiF! Acabei de rodar o Mapa de Patrocinadores.
-Nome: ${d.produtor}
-Evento: ${d.evento}
-Formato: ${d.formato}
-Público: ${d.publico}
-Local: ${d.local}
-Espaços Identificados: ${d.espacos.join(', ')}
-Custo: ${d.custo}
-Meu Score foi: ${score}%`;
-  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
-}
-
-/* ---------- Tela de resultado ---------- */
-function finish(){
-  const d = getData();
-  const r = calcularScore(d);
-
-  $('form').style.display = 'none';
-  $('result').classList.add('active');
-  window.scrollTo({top: 0, behavior: 'smooth'});
-
-  $('headline').innerHTML = `Seu evento tem <b>${r.total}%</b> de Potencial de Atração de Marcas!`;
-  $('level').textContent = r.total >= 80 ? 'Potencial alto' : r.total >= 60 ? 'Potencial promissor' : 'Potencial a desenvolver';
-  $('btnWa').href = montarLinkWhatsApp(d, r.total);
-
-  // detalhamento
-  $('breakdown').innerHTML = r.partes.map(p => `
-    <div><div class="row"><span>${p.nome}</span><b>${p.val}/${p.max}</b></div>
-    <div class="mini"><i data-w="${p.max ? p.val / p.max * 100 : 0}"></i></div></div>`).join('');
-
-  // animações (anel + contador + barras)
-  const C = 502; // circunferência (2·π·80)
-  requestAnimationFrame(() => {
-    $('ringFill').style.strokeDashoffset = C - (C * r.total / 100);
-    document.querySelectorAll('.mini i').forEach(b => b.style.width = b.dataset.w + '%');
+    if (el.name === 'espaco') $('espacosErr').classList.remove('show');
   });
-  const t0 = perfo
+  document.addEventListener('change', function (e) {
+    if (e.target.name === 'espaco') $('espacosErr').classList.remove('show');
+  });
+
+  /* ---------- Coleta de respostas ---------- */
+  function getData() {
+    var marcados = document.querySelectorAll('input[name=espaco]:checked');
+    return {
+      produtor: $('produtor').value.trim(),
+      evento: $('evento').value.trim(),
+      formato: $('formato').value,
+      publico: $('publico').value,
+      local: $('local').value.trim(),
+      espacos: Array.prototype.map.call(marcados, function (c) { return c.value; }),
+      custo: $('custo').value
+    };
+  }
+
+  /* ---------- Cálculo do score ---------- */
+  function calcularScore(d) {
+    var pFormato = PESOS.formato[d.formato] || 0;
+    var pPublico = PESOS.publico[d.publico] || 0;
+    var somaEsp = d.espacos.reduce(function (s, e) { return s + (PESOS.espacos[e] || 0); }, 0);
+    var pEspacos = Math.min(TETO_ESPACOS, somaEsp);
+    var pCusto = PESOS.custo[d.custo] || 0;
+
+    // Bônus de sinergia: combinações que as marcas valorizam
+    var tem = function (e) { return d.espacos.indexOf(e) !== -1; };
+    var bonus = 0;
+    if (d.formato === 'Evento Corporativo/B2B' && tem('Coffee Break')) bonus += 8;
+    if ((d.formato === 'Festival de Música' || d.formato === 'Campeonato Esportivo') &&
+        tem('Palco Principal') && tem('Telões / Painéis de LED')) bonus += 8;
+    if (d.formato === 'Feira Gastronômica' && tem('Praça de Alimentação')) bonus += 8;
+    if (d.publico === '150 a 300 pessoas' && tem('Área VIP / Camarote')) bonus += 5;
+    bonus = Math.min(bonus, 15);
+
+    var total = Math.min(100, Math.round(pFormato + pPublico + pEspacos + pCusto + bonus));
+    return {
+      total: total,
+      partes: [
+        { nome: 'Afinidade do formato', val: pFormato, max: 20 },
+        { nome: 'Público', val: pPublico, max: 20 },
+        { nome: 'Espaços vendáveis', val: pEspacos, max: TETO_ESPACOS },
+        { nome: 'Escala do investimento', val: pCusto, max: 16 },
+        { nome: 'Sinergias identificadas', val: bonus, max: 15 }
+      ]
+    };
+  }
+
+  /* ---------- Link do WhatsApp (formato estrito) ---------- */
+  function montarLink(d, score) {
+    var msg =
+      'Olá NiF! Acabei de rodar o Mapa de Patrocinadores.\n' +
+      'Nome: ' + d.produtor + '\n' +
+      'Evento: ' + d.evento + '\n' +
+      'Formato: ' + d.formato + '\n' +
+      'Público: ' + d.publico + '\n' +
+      'Local: ' + d.local + '\n' +
+      'Espaços Identificados: ' + d.espacos.join(', ') + '\n' +
+      'Custo: ' + d.custo + '\n' +
+      'Meu Score foi: ' + score + '%';
+    return 'https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent(msg);
+  }
+
+  /* ---------- Tela de resultado ---------- */
+  function finish() {
+    var d = getData();
+    var r = calcularScore(d);
+
+    $('form').style.display = 'none';
+    $('result').classList.add('active');
+    window.scrollTo(0, 0);
+
+    $('headline').innerHTML = 'Seu evento tem <b>' + r.total + '%</b> de Potencial de Atração de Marcas!';
+    $('level').textContent = r.total >= 80 ? 'Potencial alto' : (r.total >= 60 ? 'Potencial promissor' : 'Potencial a desenvolver');
+    $('btnWa').href = montarLink(d, r.total);
+
+    $('breakdown').innerHTML = r.partes.map(function (p) {
+      var pct = p.max ? Math.round(p.val / p.max * 100) : 0;
+      return '<div><div class="row"><span>' + p.nome + '</span><b>' + p.val + '/' + p.max + '</b></div>' +
+             '<div class="mini"><i data-w="' + pct + '"></i></div></div>';
+    }).join('');
+
+    // animações: anel, barras e contador
+    var C = 502; // circunferência do anel (2·π·80)
+    setTimeout(function () {
+      $('ringFill').style.strokeDashoffset = C - (C * r.total / 100);
+      Array.prototype.forEach.call(document.querySelectorAll('.mini i'), function (b) {
+        b.style.width = b.getAttribute('data-w') + '%';
+      });
+    }, 50);
+    var n = 0, passo = Math.max(1, Math.round(r.total / 40));
+    var timer = setInterval(function () {
+      n = Math.min(r.total, n + passo);
+      $('scoreNum').textContent = n;
+      if (n >= r.total) clearInterval(timer);
+    }, 30);
+  }
+
+  /* ---------- Eventos ---------- */
+  $('btnNext').addEventListener('click', function () {
+    if (!validateStep(current)) return;
+    if (current < steps.length - 1) showStep(current + 1);
+    else finish();
+  });
+  $('btnBack').addEventListener('click', function () { showStep(current - 1); });
+  $('form').addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' && e.target.tagName === 'INPUT' && e.target.type === 'text') {
+      e.preventDefault();
+      $('btnNext').click();
+    }
+  });
+  $('btnRestart').addEventListener('click', function () {
+    Array.prototype.forEach.call(document.querySelectorAll('input[type=text], select'), function (el) { el.value = ''; });
+    Array.prototype.forEach.call(document.querySelectorAll('input[name=espaco]'), function (c) { c.checked = false; });
+    $('result').classList.remove('active');
+    $('ringFill').style.strokeDashoffset = 502;
+    $('scoreNum').textContent = '0';
+    $('form').style.display = '';
+    showStep(0);
+  });
+
+  showStep(0);
+})();
+</script>
+<!-- FIM DO ARQUIVO: se você vê esta linha, o arquivo está completo -->
+</body>
+</html>
