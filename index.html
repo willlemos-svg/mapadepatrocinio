@@ -1,873 +1,434 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>Mapa de Patrocinadores | NiF</title>
-
-  <style>
-    /* =========================================================
-       RESET E CONFIGURAÇÕES GERAIS
-    ========================================================= */
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      font-family: Arial, Helvetica, sans-serif;
-      background: #0b1118;
-      color: #f4f7fa;
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-    }
-
-    button,
-    input,
-    select {
-      font: inherit;
-    }
-
-    /* =========================================================
-       CONTAINER PRINCIPAL
-    ========================================================= */
-
-    .app {
-      width: 100%;
-      max-width: 720px;
-      background: #121a23;
-      border: 1px solid #263442;
-      border-radius: 22px;
-      overflow: hidden;
-      box-shadow: 0 25px 70px rgba(0, 0, 0, 0.45);
-    }
-
-    /* =========================================================
-       HEADER
-    ========================================================= */
-
-    .header {
-      padding: 28px 30px 22px;
-      border-bottom: 1px solid #263442;
-      background: #101820;
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 20px;
-    }
-
-    .brand-mark {
-      width: 34px;
-      height: 34px;
-      border-radius: 9px;
-      background: #b6ff3b;
-      color: #071009;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 900;
-      font-size: 17px;
-    }
-
-    .brand-name {
-      font-size: 18px;
-      font-weight: 800;
-      letter-spacing: 0.5px;
-    }
-
-    .brand-name span {
-      color: #b6ff3b;
-    }
-
-    .header h1 {
-      font-size: clamp(25px, 5vw, 36px);
-      line-height: 1.1;
-      margin-bottom: 10px;
-    }
-
-    .header p {
-      color: #91a0ad;
-      line-height: 1.5;
-      font-size: 15px;
-    }
-
-    /* =========================================================
-       BARRA DE PROGRESSO
-    ========================================================= */
-
-    .progress-area {
-      margin-top: 22px;
-    }
-
-    .progress-info {
-      display: flex;
-      justify-content: space-between;
-      color: #7f8d99;
-      font-size: 12px;
-      margin-bottom: 8px;
-    }
-
-    .progress-bar {
-      width: 100%;
-      height: 5px;
-      background: #263442;
-      border-radius: 10px;
-      overflow: hidden;
-    }
-
-    .progress-fill {
-      height: 100%;
-      width: 14.28%;
-      background: linear-gradient(90deg, #b6ff3b, #55d9ff);
-      border-radius: 10px;
-      transition: width 0.35s ease;
-    }
-
-    /* =========================================================
-       FORMULÁRIO
-    ========================================================= */
-
-    .form-area {
-      padding: 32px 30px;
-    }
-
-    .step {
-      display: none;
-      animation: fadeIn 0.3s ease;
-    }
-
-    .step.active {
-      display: block;
-    }
-
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateX(12px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateX(0);
-      }
-    }
-
-    .step-number {
-      color: #b6ff3b;
-      font-size: 13px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-bottom: 9px;
-    }
-
-    .step h2 {
-      font-size: 25px;
-      margin-bottom: 9px;
-    }
-
-    .step-description {
-      color: #8998a5;
-      font-size: 14px;
-      line-height: 1.5;
-      margin-bottom: 24px;
-    }
-
-    /* =========================================================
-       CAMPOS
-    ========================================================= */
-
-    .field {
-      margin-bottom: 22px;
-    }
-
-    .field label {
-      display: block;
-      margin-bottom: 9px;
-      font-size: 14px;
-      font-weight: 700;
-      color: #dce4ea;
-    }
-
-    .required {
-      color: #b6ff3b;
-    }
-
-    input,
-    select {
-      width: 100%;
-      height: 52px;
-      background: #0c131b;
-      border: 1px solid #2a3948;
-      border-radius: 11px;
-      padding: 0 15px;
-      color: #f4f7fa;
-      outline: none;
-      transition: 0.2s;
-    }
-
-    input::placeholder {
-      color: #596976;
-    }
-
-    input:focus,
-    select:focus {
-      border-color: #b6ff3b;
-      box-shadow: 0 0 0 3px rgba(182, 255, 59, 0.08);
-    }
-
-    select {
-      cursor: pointer;
-    }
-
-    /* =========================================================
-       CHECKBOXES
-    ========================================================= */
-
-    .checkbox-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-    }
-
-    .checkbox-item {
-      position: relative;
-    }
-
-    .checkbox-item input {
-      position: absolute;
-      opacity: 0;
-      pointer-events: none;
-    }
-
-    .checkbox-item label {
-      min-height: 58px;
-      display: flex;
-      align-items: center;
-      padding: 12px 14px;
-      margin: 0;
-      background: #0c131b;
-      border: 1px solid #2a3948;
-      border-radius: 11px;
-      cursor: pointer;
-      color: #aebbc5;
-      font-size: 13px;
-      transition: 0.2s;
-    }
-
-    .checkbox-item label:hover {
-      border-color: #60717f;
-    }
-
-    .checkbox-item input:checked + label {
-      background: rgba(182, 255, 59, 0.08);
-      border-color: #b6ff3b;
-      color: #f4f7fa;
-    }
-
-    .checkbox-item input:checked + label::before {
-      content: "✓";
-      color: #b6ff3b;
-      font-weight: bold;
-      margin-right: 8px;
-    }
-
-    /* =========================================================
-       BOTÕES
-    ========================================================= */
-
-    .buttons {
-      display: flex;
-      gap: 12px;
-      margin-top: 28px;
-    }
-
-    .btn {
-      border: 0;
-      border-radius: 11px;
-      min-height: 52px;
-      padding: 0 20px;
-      font-weight: 800;
-      cursor: pointer;
-      transition: 0.2s;
-    }
-
-    .btn-primary {
-      flex: 1;
-      background: #b6ff3b;
-      color: #081008;
-    }
-
-    .btn-primary:hover {
-      transform: translateY(-2px);
-      background: #c4ff63;
-      box-shadow: 0 8px 25px rgba(182, 255, 59, 0.15);
-    }
-
-    .btn-secondary {
-      background: #202c38;
-      color: #dce4ea;
-    }
-
-    .btn-secondary:hover {
-      background: #293847;
-    }
-
-    /* =========================================================
-       RESULTADO
-    ========================================================= */
-
-    .result {
-      display: none;
-      padding: 38px 30px 35px;
-      text-align: center;
-    }
-
-    .result.active {
-      display: block;
-      animation: fadeIn 0.4s ease;
-    }
-
-    .result-badge {
-      display: inline-block;
-      padding: 7px 12px;
-      border-radius: 30px;
-      background: rgba(182, 255, 59, 0.08);
-      border: 1px solid rgba(182, 255, 59, 0.3);
-      color: #b6ff3b;
-      font-size: 12px;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-bottom: 20px;
-    }
-
-    .score-circle {
-      width: 190px;
-      height: 190px;
-      margin: 0 auto 25px;
-      border-radius: 50%;
-      background:
-        radial-gradient(circle at center, #121a23 61%, transparent 62%),
-        conic-gradient(#b6ff3b var(--score), #293743 0);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .score-number {
-      font-size: 58px;
-      font-weight: 900;
-      line-height: 1;
-    }
-
-    .score-percent {
-      color: #b6ff3b;
-      font-size: 15px;
-      font-weight: 700;
-      margin-top: 4px;
-    }
-
-    .result h2 {
-      font-size: clamp(25px, 5vw, 32px);
-      margin-bottom: 14px;
-    }
-
-    .result-text {
-      color: #9ba9b5;
-      line-height: 1.65;
-      font-size: 15px;
-      max-width: 560px;
-      margin: 0 auto 25px;
-    }
-
-    .score-message {
-      padding: 15px;
-      border-radius: 11px;
-      background: #0c131b;
-      border: 1px solid #263442;
-      color: #c8d2da;
-      font-size: 13px;
-      margin-bottom: 22px;
-    }
-
-    .whatsapp {
-      display: flex;
-      width: 100%;
-      min-height: 56px;
-      align-items: center;
-      justify-content: center;
-      gap: 9px;
-      border-radius: 11px;
-      background: #25d366;
-      color: #061109;
-      text-decoration: none;
-      font-weight: 900;
-      transition: 0.2s;
-    }
-
-    .whatsapp:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 30px rgba(37, 211, 102, 0.18);
-    }
-
-    .restart {
-      display: inline-block;
-      margin-top: 18px;
-      color: #7f8d99;
-      font-size: 13px;
-      text-decoration: underline;
-      cursor: pointer;
-    }
-
-    /* =========================================================
-       RESPONSIVIDADE
-    ========================================================= */
-
-    @media (max-width: 600px) {
-      body {
-        padding: 0;
-        align-items: stretch;
-      }
-
-      .app {
-        min-height: 100vh;
-        border-radius: 0;
-        border: 0;
-      }
-
-      .header {
-        padding: 24px 20px 20px;
-      }
-
-      .form-area {
-        padding: 28px 20px;
-      }
-
-      .result {
-        padding: 32px 20px;
-      }
-
-      .checkbox-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .buttons {
-        flex-direction: column-reverse;
-      }
-
-      .btn-secondary {
-        width: 100%;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mapa de Patrocinadores | NiF</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ===== Tokens de design ===== */
+:root{
+  --navy:#0A1628;        /* fundo principal */
+  --navy-2:#0F1F38;      /* cartão */
+  --graphite:#232D3B;    /* bordas / campos */
+  --graphite-2:#2E3A4C;
+  --text:#E8EEF7;
+  --muted:#93A1B8;
+  --neon:#2BFF88;        /* ação principal */
+  --blue:#3D8BFF;        /* detalhe secundário */
+  --danger:#FF6B6B;
+  --radius:14px;
+  --display:'Sora','Segoe UI',system-ui,sans-serif;
+  --body:'Inter','Segoe UI',system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{
+  font-family:var(--body);color:var(--text);line-height:1.55;min-height:100vh;
+  background:
+    radial-gradient(900px 500px at 85% -10%,rgba(61,139,255,.18),transparent 60%),
+    var(--navy);
+  display:flex;flex-direction:column;align-items:center;padding:24px 16px 48px;
+}
+header{width:100%;max-width:620px;display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}
+.brand{font-family:var(--display);font-weight:800;font-size:1.35rem;letter-spacing:.5px}
+.brand span{color:var(--neon)}
+.tag{font-size:.8rem;color:var(--muted)}
+main{width:100%;max-width:620px}
+.card{
+  background:var(--navy-2);border:1px solid var(--graphite);border-radius:20px;
+  padding:28px 24px;box-shadow:0 20px 50px rgba(0,0,0,.35);
+}
+h1,h2{font-family:var(--display);line-height:1.2}
+h1{font-size:1.6rem;margin-bottom:8px}
+h2{font-size:1.35rem;margin-bottom:6px}
+.lead{color:var(--muted);margin-bottom:22px;font-size:.98rem}
+
+/* ===== Progresso ===== */
+.progress{margin-bottom:22px}
+.progress-top{display:flex;justify-content:space-between;font-size:.82rem;color:var(--muted);margin-bottom:8px}
+.bar{height:6px;background:var(--graphite);border-radius:99px;overflow:hidden}
+.bar i{display:block;height:100%;width:25%;background:linear-gradient(90deg,var(--blue),var(--neon));border-radius:99px;transition:width .4s ease}
+
+/* ===== Campos ===== */
+.step{display:none}
+.step.active{display:block;animation:in .35s ease}
+@keyframes in{from{opacity:0;transform:translateX(14px)}to{opacity:1;transform:none}}
+.field{margin-bottom:18px}
+label.lbl,.legend{display:block;font-weight:600;font-size:.92rem;margin-bottom:7px}
+input[type=text],select{
+  width:100%;background:var(--navy);color:var(--text);border:1px solid var(--graphite-2);
+  border-radius:10px;padding:13px 14px;font:inherit;font-size:1rem;transition:border-color .2s,box-shadow .2s;
+  appearance:none;-webkit-appearance:none;
+}
+select{
+  background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);
+  background-position:calc(100% - 20px) 50%,calc(100% - 14px) 50%;background-size:6px 6px;background-repeat:no-repeat;padding-right:38px;
+}
+input::placeholder{color:#5F6E86}
+input:focus,select:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(61,139,255,.25)}
+.invalid{border-color:var(--danger)!important}
+.err{color:var(--danger);font-size:.82rem;margin-top:5px;display:none}
+.err.show{display:block}
+.checks{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.check{position:relative}
+.check input{position:absolute;opacity:0;inset:0;cursor:pointer;width:100%;height:100%;margin:0}
+.check span{
+  display:block;padding:13px 14px 13px 42px;border:1px solid var(--graphite-2);border-radius:10px;
+  background:var(--navy);font-size:.92rem;position:relative;transition:all .2s;
+}
+.check span::before{
+  content:"";position:absolute;left:14px;top:50%;width:16px;height:16px;margin-top:-8px;
+  border:2px solid var(--graphite-2);border-radius:5px;transition:all .2s;
+}
+.check input:checked+span{border-color:var(--neon);background:rgba(43,255,136,.07)}
+.check input:checked+span::before{background:var(--neon);border-color:var(--neon);box-shadow:inset 0 0 0 3px var(--navy)}
+.check input:focus-visible+span{box-shadow:0 0 0 3px rgba(61,139,255,.35)}
+
+/* ===== Botões ===== */
+.actions{display:flex;gap:12px;margin-top:24px}
+button{font:inherit;cursor:pointer;border:0;border-radius:12px;padding:14px 22px;font-weight:700;font-size:1rem;transition:transform .15s,box-shadow .2s,background .2s}
+button:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+.btn-primary{flex:1;background:var(--neon);color:#04210F;box-shadow:0 8px 24px rgba(43,255,136,.25)}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 12px 30px rgba(43,255,136,.35)}
+.btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--graphite-2)}
+.btn-ghost:hover{color:var(--text);border-color:var(--muted)}
+
+/* ===== Resultado ===== */
+#result{display:none;text-align:center}
+#result.active{display:block;animation:in .45s ease}
+.ring{position:relative;width:190px;height:190px;margin:4px auto 20px}
+.ring svg{transform:rotate(-90deg)}
+.ring circle{fill:none;stroke-width:12;stroke-linecap:round}
+.ring .track{stroke:var(--graphite)}
+.ring .fill{stroke:var(--neon);stroke-dasharray:502;stroke-dashoffset:502;transition:stroke-dashoffset 1.6s cubic-bezier(.2,.8,.2,1)}
+.ring .num{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:var(--display);font-weight:800;font-size:3rem}
+.ring .num small{font-size:.8rem;font-weight:500;color:var(--muted);font-family:var(--body)}
+.headline{font-family:var(--display);font-size:1.4rem;font-weight:700;margin-bottom:14px}
+.headline b{color:var(--neon)}
+.level{display:inline-block;padding:5px 14px;border-radius:99px;font-size:.82rem;font-weight:600;margin-bottom:16px;background:rgba(61,139,255,.15);color:#8DBBFF;border:1px solid rgba(61,139,255,.4)}
+.explain{color:var(--muted);text-align:left;background:var(--navy);border:1px solid var(--graphite);border-radius:12px;padding:16px;margin-bottom:20px;font-size:.95rem}
+.breakdown{display:grid;gap:8px;text-align:left;margin-bottom:22px}
+.row{display:flex;justify-content:space-between;font-size:.88rem;color:var(--muted)}
+.row b{color:var(--text)}
+.mini{height:5px;background:var(--graphite);border-radius:99px;overflow:hidden;margin-top:4px}
+.mini i{display:block;height:100%;background:var(--blue);border-radius:99px;transition:width 1.2s ease;width:0}
+.btn-wa{display:block;width:100%;text-decoration:none;background:var(--neon);color:#04210F;font-weight:800;border-radius:12px;padding:17px 20px;font-size:1.05rem;box-shadow:0 8px 26px rgba(43,255,136,.3);transition:transform .15s}
+.btn-wa:hover{transform:translateY(-2px)}
+.restart{margin-top:14px;background:none;color:var(--muted);text-decoration:underline;padding:8px;font-weight:500;font-size:.9rem}
+footer{margin-top:22px;font-size:.78rem;color:#5F6E86;text-align:center}
+
+@media(max-width:520px){
+  .card{padding:22px 18px}
+  .checks{grid-template-columns:1fr}
+  h1{font-size:1.4rem}
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
 </head>
-
 <body>
 
-  <main class="app">
+<header>
+  <div class="brand">Ni<span>F</span></div>
+  <div class="tag">Mapa de Patrocinadores</div>
+</header>
 
-    <!-- =======================================================
-         HEADER
-    ======================================================== -->
+<main>
+  <!-- ================= FORMULÁRIO (multi-step) ================= -->
+  <form id="form" class="card" novalidate>
+    <div class="progress">
+      <div class="progress-top"><span id="stepLabel">Etapa 1 de 4</span><span id="stepName">Seus dados</span></div>
+      <div class="bar"><i id="barFill"></i></div>
+    </div>
 
-    <header class="header">
-
-      <div class="brand">
-        <div class="brand-mark">N</div>
-        <div class="brand-name">Ni<span>F</span></div>
+    <!-- Etapa 1 -->
+    <section class="step active" data-name="Seus dados">
+      <h1>Quanto o seu evento vale para as marcas?</h1>
+      <p class="lead">Responda 4 blocos rápidos e descubra seu potencial de patrocínio.</p>
+      <div class="field">
+        <label class="lbl" for="produtor">Nome do produtor / responsável</label>
+        <input type="text" id="produtor" placeholder="Seu nome completo" autocomplete="name" required>
+        <div class="err">Informe o nome do responsável.</div>
       </div>
-
-      <h1>Mapa de Patrocinadores</h1>
-
-      <p>
-        Descubra o potencial comercial do seu evento
-        e identifique onde estão as melhores oportunidades
-        para atrair marcas.
-      </p>
-
-      <div class="progress-area">
-        <div class="progress-info">
-          <span id="progressText">Etapa 1 de 7</span>
-          <span id="progressPercent">14%</span>
-        </div>
-
-        <div class="progress-bar">
-          <div class="progress-fill" id="progressFill"></div>
-        </div>
+      <div class="field">
+        <label class="lbl" for="evento">Nome do evento</label>
+        <input type="text" id="evento" placeholder="Ex.: Summit Gaúcho de Inovação" required>
+        <div class="err">Informe o nome do evento.</div>
       </div>
+    </section>
 
-    </header>
+    <!-- Etapa 2 -->
+    <section class="step" data-name="O evento">
+      <h2>Sobre o evento</h2>
+      <p class="lead">Formato, público e local definem quais marcas se encaixam.</p>
+      <div class="field">
+        <label class="lbl" for="formato">Formato do evento</label>
+        <select id="formato" required>
+          <option value="">Selecione…</option>
+          <option>Festival de Música</option>
+          <option>Evento Corporativo/B2B</option>
+          <option>Campeonato Esportivo</option>
+          <option>Feira Gastronômica</option>
+          <option>Outro</option>
+        </select>
+        <div class="err">Escolha o formato.</div>
+      </div>
+      <div class="field">
+        <label class="lbl" for="publico">Tamanho do público estimado</label>
+        <select id="publico" required>
+          <option value="">Selecione…</option>
+          <option>Até 50 pessoas</option>
+          <option>50 a 150 pessoas</option>
+          <option>150 a 300 pessoas</option>
+          <option>300 a 500 pessoas</option>
+        </select>
+        <div class="err">Escolha o tamanho do público.</div>
+      </div>
+      <div class="field">
+        <label class="lbl" for="local">Local do evento</label>
+        <input type="text" id="local" placeholder="Ex.: Hotel, Galpão, Espaço Aberto, Arena" required>
+        <div class="err">Informe o local.</div>
+      </div>
+    </section>
 
-
-    <!-- =======================================================
-         FORMULÁRIO
-    ======================================================== -->
-
-    <section class="form-area">
-
-      <form id="sponsorForm">
-
-        <!-- ETAPA 1 -->
-        <div class="step active">
-
-          <div class="step-number">Etapa 01</div>
-
-          <h2>Quem está por trás do projeto?</h2>
-
-          <p class="step-description">
-            Começamos identificando o responsável pelo evento.
-          </p>
-
-          <div class="field">
-            <label for="producer">
-              Nome do Produtor / Responsável
-              <span class="required">*</span>
-            </label>
-
-            <input
-              type="text"
-              id="producer"
-              placeholder="Ex: João da Silva"
-              required
-            >
-          </div>
-
-          <div class="buttons">
-            <button type="button" class="btn btn-primary" onclick="nextStep()">
-              Continuar →
-            </button>
-          </div>
-
+    <!-- Etapa 3 -->
+    <section class="step" data-name="Espaços">
+      <h2>Áreas e espaços disponíveis</h2>
+      <p class="lead">Cada espaço é um ativo que pode ser vendido a uma marca. Marque tudo o que existir.</p>
+      <div class="field">
+        <div class="checks" id="espacos">
+          <label class="check"><input type="checkbox" name="espaco" value="Palco Principal"><span>Palco Principal</span></label>
+          <label class="check"><input type="checkbox" name="espaco" value="Área VIP / Camarote"><span>Área VIP / Camarote</span></label>
+          <label class="check"><input type="checkbox" name="espaco" value="Credenciamento / Entrada"><span>Credenciamento / Entrada</span></label>
+          <label class="check"><input type="checkbox" name="espaco" value="Banheiros"><span>Banheiros</span></label>
+          <label class="check"><input type="checkbox" name="espaco" value="Praça de Alimentação"><span>Praça de Alimentação</span></label>
+          <label class="check"><input type="checkbox" name="espaco" value="Coffee Break"><span>Haverá Coffee Break?</span></label>
+          <label class="check"><input type="checkbox" name="espaco" value="Telões / Painéis de LED"><span>Telões / Painéis de LED</span></label>
         </div>
-
-
-        <!-- ETAPA 2 -->
-        <div class="step">
-
-          <div class="step-number">Etapa 02</div>
-
-          <h2>Qual é o nome do evento?</h2>
-
-          <p class="step-description">
-            O nome ajuda a contextualizar o projeto comercialmente.
-          </p>
-
-          <div class="field">
-            <label for="eventName">
-              Nome do Evento
-              <span class="required">*</span>
-            </label>
-
-            <input
-              type="text"
-              id="eventName"
-              placeholder="Ex: Summit Sul 2027"
-              required
-            >
-          </div>
-
-          <div class="buttons">
-            <button type="button" class="btn btn-secondary" onclick="prevStep()">
-              ← Voltar
-            </button>
-
-            <button type="button" class="btn btn-primary" onclick="nextStep()">
-              Continuar →
-            </button>
-          </div>
-
-        </div>
-
-
-        <!-- ETAPA 3 -->
-        <div class="step">
-
-          <div class="step-number">Etapa 03</div>
-
-          <h2>Que tipo de evento é?</h2>
-
-          <p class="step-description">
-            Diferentes formatos atraem diferentes categorias de patrocinadores.
-          </p>
-
-          <div class="field">
-
-            <label for="format">
-              Formato do Evento
-              <span class="required">*</span>
-            </label>
-
-            <select id="format" required>
-              <option value="">Selecione uma opção</option>
-              <option value="Festival de Música">Festival de Música</option>
-              <option value="Evento Corporativo/B2B">Evento Corporativo/B2B</option>
-              <option value="Campeonato Esportivo">Campeonato Esportivo</option>
-              <option value="Feira Gastronômica">Feira Gastronômica</option>
-              <option value="Outro">Outro</option>
-            </select>
-
-          </div>
-
-          <div class="buttons">
-
-            <button type="button" class="btn btn-secondary" onclick="prevStep()">
-              ← Voltar
-            </button>
-
-            <button type="button" class="btn btn-primary" onclick="nextStep()">
-              Continuar →
-            </button>
-
-          </div>
-
-        </div>
-
-
-        <!-- ETAPA 4 -->
-        <div class="step">
-
-          <div class="step-number">Etapa 04</div>
-
-          <h2>Qual é o tamanho do público?</h2>
-
-          <p class="step-description">
-            O perfil e o volume de público influenciam diretamente o potencial comercial.
-          </p>
-
-          <div class="field">
-
-            <label for="audience">
-              Público Estimado
-              <span class="required">*</span>
-            </label>
-
-            <select id="audience" required>
-              <option value="">Selecione uma opção</option>
-              <option value="Até 50 pessoas">Até 50 pessoas</option>
-              <option value="50 a 150 pessoas">50 a 150 pessoas</option>
-              <option value="150 a 300 pessoas">150 a 300 pessoas</option>
-              <option value="300 a 500 pessoas">300 a 500 pessoas</option>
-            </select>
-
-          </div>
-
-          <div class="buttons">
-
-            <button type="button" class="btn btn-secondary" onclick="prevStep()">
-              ← Voltar
-            </button>
-
-            <button type="button" class="btn btn-primary" onclick="nextStep()">
-              Continuar →
-            </button>
-
-          </div>
-
-        </div>
-
-
-        <!-- ETAPA 5 -->
-        <div class="step">
-
-          <div class="step-number">Etapa 05</div>
-
-          <h2>Onde o evento acontece?</h2>
-
-          <p class="step-description">
-            O ambiente pode revelar espaços comerciais que normalmente passam despercebidos.
-          </p>
-
-          <div class="field">
-
-            <label for="location">
-              Local do Evento
-              <span class="required">*</span>
-            </label>
-
-            <input
-              type="text"
-              id="location"
-              placeholder="Ex: Hotel, Galpão, Arena..."
-              required
-            >
-
-          </div>
-
-          <div class="buttons">
-
-            <button type="button" class="btn btn-secondary" onclick="prevStep()">
-              ← Voltar
-            </button>
-
-            <button type="button" class="btn btn-primary" onclick="nextStep()">
-              Continuar →
-            </button>
-
-          </div>
-
-        </div>
-
-
-        <!-- ETAPA 6 -->
-        <div class="step">
-
-          <div class="step-number">Etapa 06</div>
-
-          <h2>Quais espaços estarão disponíveis?</h2>
-
-          <p class="step-description">
-            Selecione todos os espaços existentes no seu evento.
-          </p>
-
-          <div class="checkbox-grid">
-
-            <div class="checkbox-item">
-              <input type="checkbox" id="palco" value="Palco Principal">
-              <label for="palco">Palco Principal</label>
-            </div>
-
-            <div class="checkbox-item">
-              <input type="checkbox" id="vip" value="Área VIP / Camarote">
-              <label for="vip">Área VIP / Camarote</label>
-            </div>
-
-            <div class="checkbox-item">
-              <input type="checkbox" id="credenciamento" value="Credenciamento / Entrada">
-              <label for="credenciamento">Credenciamento / Entrada</label>
-            </div>
-
-            <div class="checkbox-item">
-              <input type="checkbox" id="banheiros" value="Banheiros">
-              <label for="banheiros">Banheiros</label>
-            </div>
-
-            <div class="checkbox-item">
-              <input type="checkbox" id="alimentacao" value="Praça de Alimentação">
-              <label for="alimentacao">Praça de Alimentação</label>
-            </div>
-
-            <div class="checkbox-item">
-              <input type="checkbox" id="coffee" value="Coffee Break">
-              <label for="coffee">Haverá Coffee Break?</label>
-            </div>
-
-            <div class="checkbox-item">
-              <input type="checkbox" id="led" value="Telões / Painéis de LED">
-              <label for="led">Telões / Painéis de LED</label>
-            </div>
-
-          </div>
-
-          <div class="buttons">
-
-            <button type="button" class="btn btn-secondary" onclick="prevStep()">
-              ← Voltar
-            </button>
-
-            <button type="button" class="btn btn-primary" onclick="nextStep()">
-              Continuar →
-            </button>
-
-          </div>
-
-        </div>
-
-
-        <!-- ETAPA 7 -->
-        <div class="step">
-
-          <div class="step-number">Etapa 07</div>
-
-          <h2>Qual é o investimento previsto?</h2>
-
-          <p class="step-description">
-            Uma estimativa de produção nos ajuda a dimensionar o potencial comercial.
-          </p>
-
-          <div class="field">
-
-            <label for="cost">
-              Custo Estimado de Produção
-              <span class="required">*</span>
-            </label>
-
-            <select id="cost" required>
-
-              <option value="">Selecione uma opção</option>
-
-              <option value="Até R$ 5mil">
-                Até R$ 5mil
-              </option>
-
-              <option value="R$ 5mil a R$ 20mil">
-                R$ 5mil a R$ 20mil
-              </option>
-
-              <option value="R$ 20mil a R$ 50mil">
-                R$ 20mil a R$ 50mil
-              </option>
-
-              <option value="Acima de R$ 50mil">
-                Acima de R$ 50mil
-              </option>
-
-            </select>
-
-          </div>
-
-          <div class="buttons">
-
-            <button type="button" class="btn btn-secondary" onclick="prevStep()">
-              ← Voltar
-            </button>
-
-            <button type="button" class="btn btn-primary" onclick="calculateScore()">
-              Calcular Potencial de Patrocínio →
-            </button>
-
-          </div>
-
-        </div>
-
-      </form>
-
-
-      <!-- =====================================================
-           RESULTADO
-      ====================================================== -->
-
-      <section class="result" id="result">
-
-        <div class="result-badge">
-          Análise concluída
-        </div>
-
-        <div class="score-circle" id="scoreCircle">
-
-          <div class="score-number" id="scoreNumber">
-            85
-          </div>
-
-          <div class="score-percent">
-            POTENCIAL
-          </div>
-
-        </div>
-
-        <h2 id="resultTitle">
-          Seu evento tem alto potencial comercial!
-        </h2>
-
-        <p class="result-text">
-          O seu evento p
+        <div class="err" id="espacosErr">Marque pelo menos um espaço.</div>
+      </div>
+    </section>
+
+    <!-- Etapa 4 -->
+    <section class="step" data-name="Investimento">
+      <h2>Custo de produção</h2>
+      <p class="lead">Quanto maior o investimento, mais a marca precisa enxergar retorno. Isso ajuda a precificar as cotas.</p>
+      <div class="field">
+        <label class="lbl" for="custo">Custo estimado de produção</label>
+        <select id="custo" required>
+          <option value="">Selecione…</option>
+          <option>Até R$ 5mil</option>
+          <option>R$ 5mil a R$ 20mil</option>
+          <option>R$ 20mil a R$ 50mil</option>
+          <option>Acima de R$ 50mil</option>
+        </select>
+        <div class="err">Escolha a faixa de custo.</div>
+      </div>
+    </section>
+
+    <div class="actions">
+      <button type="button" class="btn-ghost" id="btnBack" hidden>Voltar</button>
+      <button type="button" class="btn-primary" id="btnNext">Continuar</button>
+    </div>
+  </form>
+
+  <!-- ================= RESULTADO ================= -->
+  <section id="result" class="card" aria-live="polite">
+    <div class="ring">
+      <svg width="190" height="190" viewBox="0 0 190 190">
+        <circle class="track" cx="95" cy="95" r="80"/>
+        <circle class="fill" id="ringFill" cx="95" cy="95" r="80"/>
+      </svg>
+      <div class="num"><span id="scoreNum">0</span><small>de 100</small></div>
+    </div>
+    <div class="headline" id="headline"></div>
+    <div class="level" id="level"></div>
+    <p class="explain">O seu evento possui pontos cegos de monetização e espaços altamente lucrativos (como o seu Coffee Break ou Credenciamento) que marcas adorariam comprar. Clique abaixo para liberar o seu Mapa de Patrocinadores completo e falar com um especialista da NiF.</p>
+    <div class="breakdown" id="breakdown"></div>
+    <a id="btnWa" class="btn-wa" href="#" target="_blank" rel="noopener">Liberar Meu Mapa Completo no WhatsApp</a>
+    <button type="button" class="restart" id="btnRestart">Refazer o diagnóstico</button>
+  </section>
+
+  <footer>NiF · Agência de patrocínios e eventos</footer>
+</main>
+
+<script>
+/* ============================================================
+   MAPA DE PATROCINADORES — NiF
+   1) Navegação multi-step e validação
+   2) Cálculo do score (0–100) com pesos
+   3) Tela de resultado + link do WhatsApp
+   ============================================================ */
+
+const WHATSAPP_NUMBER = '5551998750392'; // DDI 55 + DDD 51 + número do consultor
+
+/* ---------- Pesos do score ---------- */
+// Cada bloco tem um teto de pontos. Soma dos tetos + bônus é limitada a 100.
+const PESOS = {
+  formato: {            // máx 20 — afinidade do formato com marcas
+    'Evento Corporativo/B2B': 20,
+    'Campeonato Esportivo': 18,
+    'Festival de Música': 16,
+    'Feira Gastronômica': 14,
+    'Outro': 8
+  },
+  publico: {            // máx 20 — público qualificado (150–300) pontua mais
+    'Até 50 pessoas': 8,
+    '50 a 150 pessoas': 14,
+    '150 a 300 pessoas': 20,
+    '300 a 500 pessoas': 18
+  },
+  espacos: {            // máx 25 (soma limitada) — ativos vendáveis
+    'Palco Principal': 5,
+    'Área VIP / Camarote': 5,
+    'Credenciamento / Entrada': 4,
+    'Banheiros': 2,
+    'Praça de Alimentação': 4,
+    'Coffee Break': 5,
+    'Telões / Painéis de LED': 5
+  },
+  custo: {              // máx 16 — custo maior = mais visibilidade a justificar
+    'Até R$ 5mil': 6,
+    'R$ 5mil a R$ 20mil': 12,
+    'R$ 20mil a R$ 50mil': 16,
+    'Acima de R$ 50mil': 15
+  }
+};
+const TETO_ESPACOS = 25;
+
+/* ---------- Estado e elementos ---------- */
+const $ = id => document.getElementById(id);
+const steps = [...document.querySelectorAll('.step')];
+let current = 0;
+
+function showStep(i){
+  current = i;
+  steps.forEach((s, idx) => s.classList.toggle('active', idx === i));
+  $('stepLabel').textContent = `Etapa ${i + 1} de ${steps.length}`;
+  $('stepName').textContent = steps[i].dataset.name;
+  $('barFill').style.width = ((i + 1) / steps.length * 100) + '%';
+  $('btnBack').hidden = i === 0;
+  $('btnNext').textContent = i === steps.length - 1 ? 'Calcular Potencial de Patrocínio' : 'Continuar';
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+/* ---------- Validação por etapa ---------- */
+function validateStep(i){
+  let ok = true;
+  steps[i].querySelectorAll('input[type=text],select').forEach(el => {
+    const empty = !el.value.trim();
+    el.classList.toggle('invalid', empty);
+    const err = el.closest('.field').querySelector('.err');
+    if (err) err.classList.toggle('show', empty);
+    if (empty) ok = false;
+  });
+  if (steps[i].querySelector('#espacos')){
+    const any = document.querySelectorAll('input[name=espaco]:checked').length > 0;
+    $('espacosErr').classList.toggle('show', !any);
+    if (!any) ok = false;
+  }
+  return ok;
+}
+// limpa o erro ao digitar/selecionar
+document.addEventListener('input', e => {
+  if (e.target.matches('input,select')){
+    e.target.classList.remove('invalid');
+    const err = e.target.closest('.field')?.querySelector('.err');
+    if (err) err.classList.remove('show');
+  }
+});
+
+$('btnNext').addEventListener('click', () => {
+  if (!validateStep(current)) return;
+  if (current < steps.length - 1) showStep(current + 1);
+  else finish();
+});
+$('btnBack').addEventListener('click', () => showStep(current - 1));
+$('form').addEventListener('keydown', e => { // Enter avança
+  if (e.key === 'Enter' && e.target.tagName !== 'BUTTON'){ e.preventDefault(); $('btnNext').click(); }
+});
+
+/* ---------- Coleta de respostas ---------- */
+function getData(){
+  return {
+    produtor: $('produtor').value.trim(),
+    evento: $('evento').value.trim(),
+    formato: $('formato').value,
+    publico: $('publico').value,
+    local: $('local').value.trim(),
+    espacos: [...document.querySelectorAll('input[name=espaco]:checked')].map(c => c.value),
+    custo: $('custo').value
+  };
+}
+
+/* ---------- Cálculo do score ---------- */
+function calcularScore(d){
+  const pFormato = PESOS.formato[d.formato] || 0;
+  const pPublico = PESOS.publico[d.publico] || 0;
+  const pEspacos = Math.min(TETO_ESPACOS, d.espacos.reduce((s, e) => s + (PESOS.espacos[e] || 0), 0));
+  const pCusto = PESOS.custo[d.custo] || 0;
+
+  // Bônus de sinergia (combinações que as marcas valorizam)
+  let bonus = 0;
+  const tem = e => d.espacos.includes(e);
+  if (d.formato === 'Evento Corporativo/B2B' && tem('Coffee Break')) bonus += 8;                 // B2B + coffee = networking
+  if (['Festival de Música','Campeonato Esportivo'].includes(d.formato) && tem('Palco Principal') && tem('Telões / Painéis de LED')) bonus += 8; // mídia visual
+  if (d.formato === 'Feira Gastronômica' && tem('Praça de Alimentação')) bonus += 8;             // consumo direto
+  if (d.publico === '150 a 300 pessoas' && tem('Área VIP / Camarote')) bonus += 5;               // público qualificado + experiência premium
+  bonus = Math.min(bonus, 15);
+
+  const total = Math.min(100, Math.round(pFormato + pPublico + pEspacos + pCusto + bonus));
+  return {
+    total,
+    partes: [
+      {nome: 'Afinidade do formato', val: pFormato, max: 20},
+      {nome: 'Público', val: pPublico, max: 20},
+      {nome: 'Espaços vendáveis', val: pEspacos, max: TETO_ESPACOS},
+      {nome: 'Escala do investimento', val: pCusto, max: 16},
+      {nome: 'Sinergias identificadas', val: bonus, max: 15}
+    ]
+  };
+}
+
+/* ---------- Link do WhatsApp (formato estrito) ---------- */
+function montarLinkWhatsApp(d, score){
+  const msg =
+`Olá NiF! Acabei de rodar o Mapa de Patrocinadores.
+Nome: ${d.produtor}
+Evento: ${d.evento}
+Formato: ${d.formato}
+Público: ${d.publico}
+Local: ${d.local}
+Espaços Identificados: ${d.espacos.join(', ')}
+Custo: ${d.custo}
+Meu Score foi: ${score}%`;
+  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
+}
+
+/* ---------- Tela de resultado ---------- */
+function finish(){
+  const d = getData();
+  const r = calcularScore(d);
+
+  $('form').style.display = 'none';
+  $('result').classList.add('active');
+  window.scrollTo({top: 0, behavior: 'smooth'});
+
+  $('headline').innerHTML = `Seu evento tem <b>${r.total}%</b> de Potencial de Atração de Marcas!`;
+  $('level').textContent = r.total >= 80 ? 'Potencial alto' : r.total >= 60 ? 'Potencial promissor' : 'Potencial a desenvolver';
+  $('btnWa').href = montarLinkWhatsApp(d, r.total);
+
+  // detalhamento
+  $('breakdown').innerHTML = r.partes.map(p => `
+    <div><div class="row"><span>${p.nome}</span><b>${p.val}/${p.max}</b></div>
+    <div class="mini"><i data-w="${p.max ? p.val / p.max * 100 : 0}"></i></div></div>`).join('');
+
+  // animações (anel + contador + barras)
+  const C = 502; // circunferência (2·π·80)
+  requestAnimationFrame(() => {
+    $('ringFill').style.strokeDashoffset = C - (C * r.total / 100);
+    document.querySelectorAll('.mini i').forEach(b => b.style.width = b.dataset.w + '%');
+  });
+  const t0 = perfo
